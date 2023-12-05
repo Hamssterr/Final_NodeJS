@@ -7,29 +7,9 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
 
-app.get('/', (req, res) => {
-    res.render('Home')
-})
+app.use('/', require('./routers/Home'))
 
-app.get('/dashboard', (req, res) => {
-    res.render('Dashboard') 
-})
-
-app.get('/cart', (req, res) => {
-    res.render('Cart') 
-})
-
-app.get('/check-out', (req, res) => {
-    res.render('CheckOut') 
-})
-
-app.get('/manage-account', (req, res) => {
-    res.render('ManageAccount') 
-})
-
-app.get('/manage-product', (req, res) => {
-    res.render('ManageProduct') 
-})
+app.use('/accounts', require('./routers/Account'))
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {

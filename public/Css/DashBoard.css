@@ -351,7 +351,7 @@ body {
   display: grid;
   width: 90%;
   padding: 80px;
-  margin-left: 90px;
+  margin-left: -50px;
   grid-template-columns: 1000px 1fr;
   grid-gap: 30px;
 }

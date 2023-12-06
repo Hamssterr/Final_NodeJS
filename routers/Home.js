@@ -1,14 +1,15 @@
 const express = require('express')
 const Router = express.Router()
 
-const Controller = require('../controller/Home')
+const HomeController = require('../controller/Home')
+const ProductController = require('../controller/Product')
 
-Router.get('/', Controller.index)
+Router.get('/', ProductController.display_products)
 
-Router.get('/dashboard', Controller.dashboard)
+Router.get('/dashboard', HomeController.dashboard)
 
-Router.get('/cart', Controller.cart)
+Router.get('/cart', HomeController.cart)
 
-Router.get('/check-out', Controller.check_out)
+Router.get('/check-out', HomeController.check_out)
 
 module.exports = Router

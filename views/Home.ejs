@@ -121,182 +121,36 @@
 
                     <div class="products-container">
 
-                        <div class="product" data-name="p-1">
-                            <div>
-                                <img class="img-item" src="Image/ip15pm.png" alt="">
+                        <% listItems.forEach(item => { %>
+                            <div class="product" data-name="<%= item._id %>">
+                                <div>
+                                    <img class="img-item" src="Image/<%= item.url_image %>" alt="">
+                                </div>
+                                <h3><%= item.name %></h3>
+                                <div class="price">$<%= item.retail_price %></div>
                             </div>
-                            <h3>Iphone 15 pro max</h3>
-                            <div class="price">$1499.00</div>
-                        </div>
-
-                        <div class="product" data-name="p-2">
-                            <div>
-                                <img class="img-item" src="Image/ip14pm.png" alt="">
-                            </div>
-                            <h3>Iphone 14 pro max</h3>
-                            <div class="price">$1299.00</div>
-                        </div>
-
-                        <div class="product" data-name="p-3">
-                            <div>
-                                <img class="img-item" src="Image/ip14p.png" alt="">
-                            </div>
-                            <h3>Iphone 14 plus</h3>
-                            <div class="price">$899.00</div>
-                        </div>
-
-                        <div class="product" data-name="p-4">
-                            <div>
-                                <img class="img-item" src="Image/ip13.png" alt="">
-                            </div>
-                            <h3>Iphoone 13</h3>
-                            <div class="price">$799.00</div>
-                        </div>
-
-                        <div class="product" data-name="p-5">
-                            <div>
-                                <img class="img-item" src="Image/ip12.png" alt="">
-                            </div>
-                            <h3>Iphone 12</h3>
-                            <div class="price">$699.00</div>
-                        </div>
-
-                        <div class="product" data-name="p-6">
-                            <div>
-                                <img class="img-item" src="Image/ip11.png" alt="">
-                            </div>
-                            <h3>Iphone 12</h3>
-                            <div class="price">$599.00</div>
-                        </div>
+                        <% }); %>
                     </div>
 
                 </div>
 
                 <div class="products-preview">
 
-                    <div class="preview" data-target="p-1">
-                        <i class="fas fa-times"></i>
-                        <img class="img-item2" src="Image/ip15pm.png" alt="">
-                        <h3>Iphone 15 pro max</h3>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>( 250 )</span>
+                    <% listItems.forEach(item => { %>
+                        <div class="preview" data-target="<%= item._id %>">
+                            <i class="fas fa-times"></i>
+                            <img class="img-item2" src="Image/<%= item.url_image %>" alt="">
+                            <h3><%= item.name %></h3>
+                            <p>Barcode: <%= item.barcode %></p>
+                            <p>Category: <%= item.category %></p>
+                            <p>Date creation: <%= item.creation_date %></p>
+                            <div class="price">$<%= item.retail_price %></div>
+                            <div class="buttons">
+                                <a data-id="<%= item._id %>" href="#" class="cart">add to cart</a>
+                            </div>
                         </div>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, dolorem.</p>
-                        <div class="price">$1499.00</div>
-                        <div class="buttons">
-                            <a href="#" class="buy">buy now</a>
-                            <a href="#" class="cart">add to cart</a>
-                        </div>
-                    </div>
-
-                    <div class="preview" data-target="p-2">
-                        <i class="fas fa-times"></i>
-                        <img class="img-item2" src="Image/ip14pm.png" alt="">
-                        <h3>Iphone 14 pro max</h3>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>( 250 )</span>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, dolorem.</p>
-                        <div class="price">$1299.00</div>
-                        <div class="buttons">
-                            <a href="#" class="buy">buy now</a>
-                            <a href="#" class="cart">add to cart</a>
-                        </div>
-                    </div>
-
-                    <div class="preview" data-target="p-3">
-                        <i class="fas fa-times"></i>
-                        <img class="img-item2" src="Image/ip14p.png" alt="">
-                        <h3>Iphone 14 plus</h3>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>( 250 )</span>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, dolorem.</p>
-                        <div class="price">$899.00</div>
-                        <div class="buttons">
-                            <a href="#" class="buy">buy now</a>
-                            <a href="#" class="cart">add to cart</a>
-                        </div>
-                    </div>
-
-                    <div class="preview" data-target="p-4">
-                        <i class="fas fa-times"></i>
-                        <img class="img-item2" src="Image/ip13.png" alt="">
-                        <h3>Iphone 13</h3>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>( 250 )</span>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, dolorem.</p>
-                        <div class="price">$799.00</div>
-                        <div class="buttons">
-                            <a href="#" class="buy">buy now</a>
-                            <a href="#" class="cart">add to cart</a>
-                        </div>
-                    </div>
-
-                    <div class="preview" data-target="p-5">
-                        <i class="fas fa-times"></i>
-                        <img class="img-item2" src="Image/ip12.png" alt="">
-                        <h3>Iphone 12</h3>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>( 250 )</span>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, dolorem.</p>
-                        <div class="price">$699.00</div>
-                        <div class="buttons">
-                            <a href="#" class="buy">buy now</a>
-                            <a href="#" class="cart">add to cart</a>
-                        </div>
-                    </div>
-
-                    <div class="preview" data-target="p-6">
-                        <i class="fas fa-times"></i>
-                        <img class="img-item2" src="Image/ip11.png" alt="">
-                        <h3>Iphone 11</h3>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>( 250 )</span>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, dolorem.</p>
-                        <div class="price">$599.00</div>
-                        <div class="buttons">
-                            <a href="#" class="buy">buy now</a>
-                            <a href="#" class="cart">add to cart</a>
-                        </div>
-                    </div>
+                    <% }); %>
                 </div>
-
-
-
 
             </div>
 
@@ -311,6 +165,16 @@
     <!-- ====== ionicons ======= -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        document.querySelector('.products-preview').addEventListener('click', function (event) {
+            if (event.target.classList.contains('cart')) {
+                const itemId = event.target.getAttribute('data-id');
+                
+                // add product with this id to cart in database
+            }
+        })
+    </script>
 </body>
 
 </html>

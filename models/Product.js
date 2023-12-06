@@ -2,13 +2,13 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const ProductSchema = new Schema({
-    barcode: String,
-    name: String,
+    barcode: { type: String, unique: true },
+    name: { type: String, unique: true },
     import_price: Number,
     retail_price: Number,
     category: String,
     creation_date: String,
-    image_url: String
+    url_image: String
 })
 
 module.exports = mongoose.model('Product', ProductSchema)

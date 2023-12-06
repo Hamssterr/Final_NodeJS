@@ -123,23 +123,31 @@
                         <h2>Manage Production</h2>
                         <div>
                             <button class="btn btn-success" id="addItemBtn">Add New Item</button>
-                            <button class="btn btn-danger" id="deleteItemBtn">Delete</button>
                         </div>
                     </div>
+
+                    <% if(errorMessage.length > 0) { %>
+                        <div id="errorMessageAlert" class="alert fade show" style="color: red; font-size: x-large; text-align: center;">
+                            <%= errorMessage %>
+                          <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        </div>
+                    <% } %>
+
+                    <% if(successMessage.length > 0) { %>
+                        <div id="successMessageAlert" class="alert fade show" style="color: rgb(45, 177, 45); font-size: x-large; text-align: center;">
+                            <%= successMessage %>
+                          <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        </div>
+                    <% } %>
         
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>
-                                    <span class="custom-checkbox">
-                                        <input type="checkbox" id="selectAll">
-                                        <label for="selectAll"></label>
-                                    </span>
-                                </th>
-                               <ul>
-                                <th>Id</th>
+                                <th>Image</th>
+                                <th>barcode</th>
                                 <th>Name</th>
-                                <th>Price</th>
+                                <th>Import price</th>
+                                <th>Retail price</th>
                                 <th>Category</th>
                                 <th>Creation date</th>
                                 <th>Actions</th>
@@ -148,126 +156,148 @@
                         </thead>
         
                         <tbody>
-                            <!-- Your employee data rows go here -->
+                            <% listItems.forEach(item => { %>
+                                <tr>
+                                    <td><img src="Image/<%= item.url_image %>" alt="Product Image" style="width: 100%; height: 100px;"></td>
+                                    <td><%= item.barcode %></td>
+                                    <td><%= item.name %></td>
+                                    <td><%= item.import_price %></td>
+                                    <td><%= item.retail_price %></td>
+                                    <td><%= item.category %></td>
+                                    <td><%= item.creation_date %></td>
+                                    <td>
+                                        <a href="#" class="edit" 
+                                            data-id="<%= item._id %>" 
+                                            data-barcode="<%= item.barcode %>"
+                                            data-name="<%= item.name %>"
+                                            data-import_price="<%= item.import_price %>"
+                                            data-retail_price="<%= item.retail_price %>"
+                                            data-category="<%= item.category %>"
+                                            data-url_image="<%= item.url_image %>"
+                                            >&#9998;</a>
+                                        <a href="#" class="delete" data-id="<%= item._id %>">&#128465;</a>
+                                    </td>
+                                </tr>
+                            <% }); %>
                         </tbody>
                     </table>
                 </div>
             </div>
         
-            <!-- Add Employee Modal -->
+            <!-- Add Item Modal -->
             <div class="modal" id="addItemModal">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" style="color: black;">Add New Item</h5>
-                            <span class="close" id="addEmployeeCloseBtn">&times;</span>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="addName" style="color: black;">Id</label>
-                                <input type="text" id="addName" class="form-control" required>
+                        <form method="post" action="/products/add" enctype="multipart/form-data">
+                            <div class="modal-header">
+                                <h5 class="modal-title" style="color: black;">Add New Item</h5>
+                                <span class="close" id="addItemCloseBtn">&times;</span>
                             </div>
-                            <div class="form-group">
-                                <label for="addName" style="color: black;">Name</label>
-                                <input type="text" id="addName" class="form-control" required>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="addBarcode" style="color: black;">Barcode</label>
+                                    <input type="text" name="barcode" id="addBarcode" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="addName" style="color: black;">Name</label>
+                                    <input type="text" name="name" id="addName" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="addImportPrice" style="color: black;">Import Price</label>
+                                    <input type="number" name="import_price" id="addImportPrice" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="addRetailPrice" style="color: black;">Retail Price</label>
+                                    <input type="number" name="retail_price" id="addRetailPrice" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="addCategory" style="color: black;">Category</label>
+                                    <input type="text" name="category" id="addCategory" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="addImage" class="form-label" style="color: black;">Choose Image</label>
+                                    <input accept="image/*" type="file" name="image" id="addImage" class="form-control">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="addEmail" style="color: black;">Price</label>
-                                <input type="email" id="addEmail" class="form-control" required>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="addItemCancelBtn">Cancel</button>
+                                <button type="submit" class="btn btn-success" id="addItemSaveBtn">Add</button>
                             </div>
-                            <div class="form-group">
-                                <label for="addPhone" style="color: black;">Category</label>
-                                <input type="text" id="addPhone" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="addPhone" style="color: black;">Creation date</label>
-                                <input type="text" id="addPhone" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="addImage" class="form-label" style="color: black;">Choose Image</label>
-                                <input type="file" id="addImage" class="form-control">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-secondary" id="addItemCancelBtn">Cancel</button>
-                            <button class="btn btn-success" id="addItemSaveBtn">Add</button>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
         
-            <!-- Edit Employee Modal -->
-            <div class="modal" id="editEmployeeModal">
+            <!-- Edit Item Modal -->
+            <div class="modal" id="editItemModal">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Edit Item</h5>
-                            <span class="close" id="editEmployeeCloseBtn">&times;</span>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="addName" style="color: black;">Id</label>
-                                <input type="text" id="addName" class="form-control" required>
+                        <form method="post" action="/products/edit" enctype="multipart/form-data">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Item</h5>
+                                <span class="close" id="editItemCloseBtn">&times;</span>
                             </div>
-                            <div class="form-group">
-                                <label for="addName" style="color: black;">Name</label>
-                                <input type="text" id="addName" class="form-control" required>
+                            <div class="modal-body">
+                                <input id="editId" type="text" name="id" style="display: none;">
+                                <input id="editUrlImage" type="text" name="url_image" style="display: none;">
+                                <div class="form-group">
+                                    <label for="editBarcode" style="color: black;">Barcode</label>
+                                    <input type="text" name="barcode" id="editBarcode" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editName" style="color: black;">Name</label>
+                                    <input type="text" name="name" id="editName" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editImportPrice" style="color: black;">Import Price</label>
+                                    <input type="number" name="import_price" id="editImportPrice" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editRetailPrice" style="color: black;">Retail Price</label>
+                                    <input type="number" name="retail_price" id="editRetailPrice" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editCategory" style="color: black;">Category</label>
+                                    <input type="text" name="category" id="editCategory" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editImage" class="form-label" style="color: black;">Choose Image (Use old image if image is not selected)</label>
+                                    <input accept="image/*" type="file" name="image" id="editImage" class="form-control">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="addEmail" style="color: black;">Price</label>
-                                <input type="email" id="addEmail" class="form-control" required>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="editItemCancelBtn">Cancel</button>
+                                <button type="submit" class="btn btn-success" id="editItemSaveBtn">Save</button>
                             </div>
-                            <div class="form-group">
-                                <label for="addPhone" style="color: black;">Category</label>
-                                <input type="text" id="addPhone" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="addPhone" style="color: black;">Creation date</label>
-                                <input type="text" id="addPhone" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="addImage" class="form-label" style="color: black;">Choose Image</label>
-                                <input type="file" id="addImage" class="form-control">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-secondary" id="editEmployeeCancelBtn">Cancel</button>
-                            <button class="btn btn-success" id="editEmployeeSaveBtn">Save</button>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
         
-            <!-- Delete Employee Modal -->
+            <!-- Delete Item Modal -->
             <div class="modal" id="deleteItemModal">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Delete Item</h5>
-                            <span class="close" id="deleteEmployeeCloseBtn">&times;</span>
-                        </div>
-                        <div class="modal-body">
-                            <p>Are you sure you want to delete?</p>
-                            <p class="text-warning"><small>This action cannot be undone.</small></p>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-secondary" id="deleteEmployeeCancelBtn">Cancel</button>
-                            <button class="btn btn-success" id="deleteItemBtn">Delete</button>
-                        </div>
+                        <form method="post" action="/products/delete">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Delete Item</h5>
+                                <span class="close" id="deleteItemCloseBtn">&times;</span>
+                            </div>
+                            <div class="modal-body">
+                                <input id="deleteId" type="text" name="id" style="display: none;">
+                                <p>Are you sure you want to delete?</p>
+                                <p class="text-warning"><small>This action cannot be undone.</small></p>
+                            </div>
+                            <div class="modal-footer">deleteItemCancelBtn
+                                <button type="button" class="btn btn-secondary" id="deleteItemCancelBtn">Cancel</button>
+                                <button type="submit" class="btn btn-success" id="deleteItemBtn">Delete</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
             
         </div>
-
-        
-
-
-
-
-
-
-
 
     </div>
 
@@ -279,124 +309,78 @@
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-
-
     <!-- Include Bootstrap CSS and JS -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        // Sample data for demonstration purposes
-        const sampleData = [
-            // Add more data as needed
-        ];
-    
-        // Function to render employees in the table
-        function renderEmployees() {
-            const tbody = document.querySelector('tbody');
-            tbody.innerHTML = '';
-    
-            sampleData.forEach(employee => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>
-                        <span class="custom-checkbox">
-                            <input type="checkbox" id="checkbox${employee.id}" data-id="${employee.id}">
-                            <label for="checkbox${employee.id}"></label>
-                        </span>
-                    </td>
-                    <td>${employee.name}</td>
-                    <td>${employee.email}</td>
-                    <td>${employee.phone}</td>
-                    
-                    <td>
-                        <a href="#" class="edit" data-id="${employee.id}">&#9998;</a>
-                        <a href="#" class="delete" data-id="${employee.id}">&#128465;</a>
-                    </td>
-                `;
-    
-                tbody.appendChild(row);
-            });
-        }
-    
-        // Function to handle modal display
+
         function showModal(modalId) {
             const modal = document.getElementById(modalId);
             modal.style.display = 'flex';
         }
     
-        // Function to close modals
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             modal.style.display = 'none';
         }
     
-        // Event listener for the "Add New Employees" button
         document.getElementById('addItemBtn').addEventListener('click', function () {
             showModal('addItemModal');
         });
     
-        // Event listener for the "Cancel" button in the add employee modal
         document.getElementById('addItemCancelBtn').addEventListener('click', function () {
             closeModal('addItemModal');
         });
     
-        // Event listener for the "Save" button in the add employee modal
-        document.getElementById('addItemSaveBtn').addEventListener('click', function () {
-            // Add logic to save the new employee data
-            // For demonstration, let's just close the modal
-            closeModal('addItemModal');
-            // Refresh the table
-            renderEmployees();
-        });
-    
-        // Event listener for the "Edit" and "Delete" buttons in the table
         document.querySelector('tbody').addEventListener('click', function (event) {
             if (event.target.classList.contains('edit')) {
-                // Handle edit action
-                const employeeId = event.target.getAttribute('data-id');
-                // Add logic to populate the edit modal with employee data
-                // For demonstration, let's just show the edit modal
-                showModal('editEmployeeModal');
+                const itemId = event.target.getAttribute('data-id');
+                const itemBarcode = event.target.getAttribute('data-barcode');
+                const itemName = event.target.getAttribute('data-name');
+                const itemImportPrice = event.target.getAttribute('data-import_price');
+                const itemRetailPrice = event.target.getAttribute('data-retail_price');
+                const itemCategory = event.target.getAttribute('data-category');
+                const itemUrlImage = event.target.getAttribute('data-url_image');
+
+                document.getElementById('editId').value = itemId
+                document.getElementById('editUrlImage').value = itemUrlImage
+                document.getElementById('editBarcode').value = itemBarcode
+                document.getElementById('editName').value = itemName
+                document.getElementById('editImportPrice').value = itemImportPrice
+                document.getElementById('editRetailPrice').value = itemRetailPrice
+                document.getElementById('editCategory').value = itemCategory
+
+                showModal('editItemModal');
             } else if (event.target.classList.contains('delete')) {
-                // Handle delete action
-                const employeeId = event.target.getAttribute('data-id');
-                // Add logic to confirm and delete the employee
-                // For demonstration, let's just show the delete modal
+
+                const itemId = event.target.getAttribute('data-id');
+
+                document.getElementById('deleteId').value = itemId
+
                 showModal('deleteItemModal');
             }
         });
     
-        // Event listener for the "Cancel" button in the edit employee modal
-        document.getElementById('editEmployeeCancelBtn').addEventListener('click', function () {
-            closeModal('editEmployeeModal');
+        document.getElementById('editItemCancelBtn').addEventListener('click', function () {
+            closeModal('editItemModal');
         });
     
-        // Event listener for the "Save" button in the edit employee modal
-        document.getElementById('editEmployeeSaveBtn').addEventListener('click', function () {
-            // Add logic to save the edited employee data
-            // For demonstration, let's just close the modal
-            closeModal('editEmployeeModal');
-            // Refresh the table
-            renderEmployees();
-        });
-    
-        // Event listener for the "Cancel" button in the delete employee modal
-        document.getElementById('deleteEmployeeCancelBtn').addEventListener('click', function () {
+        document.getElementById('deleteItemCancelBtn').addEventListener('click', function () {
             closeModal('deleteItemModal');
         });
+
+        setTimeout(function() {
+            var errorMessageAlert = document.getElementById('errorMessageAlert');
+            var successMessageAlert = document.getElementById('successMessageAlert');
+            if (errorMessageAlert) {
+                errorMessageAlert.style.display = 'none';
+            }
+            if(successMessageAlert) {
+                successMessageAlert.style.display = 'none';
+            }
+        }, 2000);
     
-        // Event listener for the "Delete" button in the delete employee modal
-        document.getElementById('deleteItemBtn').addEventListener('click', function () {
-            // Add logic to delete the selected employees
-            // For demonstration, let's just close the modal
-            closeModal('deleteItemModal');
-            // Refresh the table
-            renderEmployees();
-        });
-    
-        // Initial rendering of employees
-        renderEmployees();
     </script>
 </body>
 

@@ -1,7 +1,3 @@
-module.exports.index = (req, res) => {
-    res.render('Home')
-}
-
 module.exports.dashboard = (req, res) => {
     res.render('Dashboard')
 }

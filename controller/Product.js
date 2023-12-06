@@ -57,6 +57,10 @@ module.exports.add_product = (req, res) => {
                         res.redirect('/products')
                     });
                 }
+                else {
+                    req.flash('errorMessage', 'Barcode or name already exists')
+                    res.redirect('/products')
+                }
             }
             else {
                 const creation_date = new Date().toLocaleDateString();
@@ -122,6 +126,10 @@ module.exports.edit_product = (req, res) => {
                         req.flash('errorMessage', 'Barcode or name already exists')
                         res.redirect('/products')
                     });
+                }
+                else {
+                    req.flash('errorMessage', 'Barcode or name already exists')
+                    res.redirect('/products')
                 }
             }
             else {

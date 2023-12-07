@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sidebar menu With Sub-menus | Using HTML, CSS & JQuery</title>
-    <link rel="stylesheet" href="Css/Home.css">
+    <link rel="stylesheet" href="/Css/Home.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
@@ -32,7 +32,7 @@
                         <div class="close-btn">
                             <ion-icon name="close-outline"></ion-icon>
                         </div>
-                        <img class="logo-leftbar" src="Image/Apple.jpg" alt="">
+                        <img class="logo-leftbar" src="/Image/Apple.jpg" alt="">
                         <h1>Apple Store</h1>
                     </header>
 
@@ -124,7 +124,7 @@
                         <% listItems.forEach(item => { %>
                             <div class="product" data-name="<%= item._id %>">
                                 <div>
-                                    <img class="img-item" src="Image/<%= item.url_image %>" alt="">
+                                    <img class="img-item" src="/Image/products/<%= item.url_image %>" alt="">
                                 </div>
                                 <h3><%= item.name %></h3>
                                 <div class="price">$<%= item.retail_price %></div>
@@ -139,7 +139,7 @@
                     <% listItems.forEach(item => { %>
                         <div class="preview" data-target="<%= item._id %>">
                             <i class="fas fa-times"></i>
-                            <img class="img-item2" src="Image/<%= item.url_image %>" alt="">
+                            <img class="img-item2" src="/Image/products/<%= item.url_image %>" alt="">
                             <h3><%= item.name %></h3>
                             <p>Barcode: <%= item.barcode %></p>
                             <p>Category: <%= item.category %></p>
@@ -160,7 +160,7 @@
 
 
     <!--======= JavaScript =============  -->
-    <script src="Style/main.js"></script>
+    <script src="/Style/main.js"></script>
 
     <!-- ====== ionicons ======= -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>

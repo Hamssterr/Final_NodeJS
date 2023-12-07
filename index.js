@@ -4,6 +4,7 @@ require('dotenv').config()
 const session = require('express-session')
 const flash = require('express-flash')
 const cookieParser = require('cookie-parser')
+const cors = require('cors')
 
 const app = express()
 
@@ -16,11 +17,19 @@ app.use(express.static(__dirname + '/public'));
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors())
 
 
 app.use('/', require('./routers/Home'))
 app.use('/accounts', require('./routers/Account'))
 app.use('/products', require('./routers/Product'))
+
+app.use((req, res) => {
+    res.json({
+        code: 1,
+        message: `Method ${req.method} not supported with URL ${req.url}`
+    })
+})
 
 const PORT = process.env.PORT || 3000
 const {MONGODB_URI, DB_NAME} = process.env

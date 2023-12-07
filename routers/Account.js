@@ -9,4 +9,6 @@ Router.post('/login', Controller.login_Submit)
 
 Router.get('/', Controller.get_all_employees)
 
+Router.post('/add', Controller.add_employee)
+
 module.exports = Router

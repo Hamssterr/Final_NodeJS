@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sidebar menu With Sub-menus | Using HTML, CSS & JQuery</title>
-    <link rel="stylesheet" href="Css/ManageAccount.css">
+    <link rel="stylesheet" href="/Css/ManageAccount.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
 
@@ -23,9 +23,7 @@
         crossorigin="anonymous"></script>
 
     <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
-        crossorigin="anonymous"></script>
+
     <!-- Icon -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
@@ -44,7 +42,7 @@
                     <div class="close-btn">
                         <ion-icon name="close-outline"></ion-icon>
                     </div>
-                    <img class="logo-leftbar" src="Image/Apple.jpg" alt="">
+                    <img class="logo-leftbar" src="/Image/Apple.jpg" alt="">
                     <h1>Apple Store</h1>
                 </header>
 
@@ -158,7 +156,7 @@
                         <tbody>
                             <% listItems.forEach(item => { %>
                                 <tr>
-                                    <td><img src="Image/<%= item.url_image %>" alt="Product Image" style="width: 100%; height: 100px;"></td>
+                                    <td><img src="/Image/products/<%= item.url_image %>" alt="Product Image" style="width: 100%; height: 100px;"></td>
                                     <td><%= item.barcode %></td>
                                     <td><%= item.name %></td>
                                     <td><%= item.import_price %></td>
@@ -303,7 +301,7 @@
 
 
     <!--======= JavaScript =============  -->
-    <script src="Style/main.js"></script>
+    <script src="/Style/main.js"></script>
 
     <!-- ====== ionicons ======= -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>

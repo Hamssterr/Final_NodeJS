@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidebar menu With Sub-menus | Using HTML, CSS & JQuery</title>
+    <title>Account Manage</title>
     <link rel="stylesheet" href="/Css/ManageAccount.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
@@ -380,22 +380,29 @@
         });
 
         document.getElementById('deleteManyEmployeeBtn').addEventListener('click', function () {
-            sendFormWithUrl('/accounts/delete-many');
+            sendFormWithUrl('/accounts/delete-many', true);
         });
 
         document.getElementById('lockEmployeeBtn').addEventListener('click', function () {
-            sendFormWithUrl('/accounts/lock');
+            sendFormWithUrl('/accounts/lock-unlock', true, 'lock');
         });
 
         document.getElementById('unlockEmployeeBtn').addEventListener('click', function () {
-            sendFormWithUrl('/accounts/unlock');
+            sendFormWithUrl('/accounts/lock-unlock', true , 'unlock');
         });
 
         document.getElementById('reSendEmailBtn').addEventListener('click', function () {
             sendFormWithUrl('/accounts/resend-email');
         });
 
-        function sendFormWithUrl(url) {
+        document.getElementById('selectAll').addEventListener('click', function () {
+            let otherCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+            otherCheckboxes.forEach(function (checkbox) {
+                checkbox.checked = document.getElementById('selectAll').checked;
+            });
+        });
+
+        function sendFormWithUrl(url, isReload, status) {
             const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
             let selectedIds = [];
 
@@ -404,11 +411,15 @@
                     const dataId = checkbox.getAttribute('data-id');
                     selectedIds.push(dataId);
                 }
-                });
+            });
 
             let form = new FormData();
             
             form.set('selectedIds', selectedIds)
+
+            if(status) {
+                form.set('status', status)
+            }
 
             let xhr = new XMLHttpRequest();
 
@@ -419,10 +430,10 @@
                     const json = JSON.parse(xhr.responseText)
 
                     if (json.code === 0) {
-                        showAndHideMessage(json.message, 'rgb(45, 177, 45)', 2000);
+                        showAndHideMessage(json.message, 'rgb(45, 177, 45)', 2000, isReload);
                     }
                     else if (json.code === 1) {
-                        showAndHideMessage(json.message, 'rgb(45, 177, 45)', 2000);
+                        showAndHideMessage(json.message, 'rgb(10, 170, 188)', 2000);
                     }
                     else if(json.code === 2) {
                         showAndHideMessage(json.message, 'red', 2000);
@@ -444,7 +455,7 @@
             }
         }, 2000);
 
-        function showAndHideMessage(messageContent, rgbaColor, duration) {
+        function showAndHideMessage(messageContent, rgbaColor, duration, isReload) {
             var messageAlert = document.getElementById('messageAlert');
 
             if (messageAlert) {
@@ -455,8 +466,15 @@
                 }
                 messageAlert.style.display = 'block';
 
+                if(isReload) {
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 300);
+                }
+
                 setTimeout(function () {
                     messageAlert.style.display = 'none';
+
                 }, duration);
             }
         }

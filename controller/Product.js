@@ -15,23 +15,32 @@ const upload = multer({
 
 module.exports.display_products = (req, res) => {
 
+    const errorMessage = req.flash('errorMessage') || ''
+
     Product.find()
         .then(listItems => {
-            res.render('Home', { listItems })
+            res.render('Home', { listItems, errorMessage })
         })
 
 }
 
 module.exports.get_all_products = (req, res) => {
 
-    const errorMessage = req.flash('errorMessage') || ''
-    const successMessage = req.flash('successMessage') || ''
-
-    Product.find()
+    if(req.session.user.role !== 'admin') {
+        Product.find()
         .then(listItems => {
-            res.render('ManageProduct', { listItems, errorMessage, successMessage })
+            return res.render('OnlyDisplayProduct', { listItems})
         })
-
+    }
+    else {
+        const errorMessage = req.flash('errorMessage') || ''
+        const successMessage = req.flash('successMessage') || ''
+    
+        Product.find()
+            .then(listItems => {
+                res.render('ManageProduct', { listItems, errorMessage, successMessage })
+            })
+    }
 }
 
 module.exports.add_product = (req, res) => {
@@ -85,7 +94,7 @@ module.exports.add_product = (req, res) => {
                     req.flash('errorMessage', 'Name already exists')
                 }
                 else {
-                    req.flash('errorMessage', 'Add fail, an error has occurred')
+                    req.flash('errorMessage', 'Add failed, an error has occurred')
                 }
                 res.redirect('/products')
             })
@@ -100,20 +109,21 @@ module.exports.edit_product = (req, res) => {
 
         const creation_date = new Date().toLocaleDateString();
         let url_image = undefined
+        let oldNamePath = undefined
+        let newNamePath = undefined
         let oldImagePath = undefined
-        let newImageName = undefined
         let newImagePath = undefined
+        let newImageName = undefined
 
         let image = req.file
 
-        if (!image) {
-            oldImagePath = path.join(__dirname, '..', 'public', 'Image', 'products', old_url_image);
-            newImageName = name.trim().replace(/\s+/g, '') + path.extname(old_url_image); // Keep the file extension
-            newImagePath = path.join(__dirname, '..', 'public', 'Image', 'products', newImageName);
-        }
-        else {
+        oldNamePath = path.join(__dirname, '..', 'public', 'Image', 'products', old_url_image);
+        newImageName = name.trim().replace(/\s+/g, '') + path.extname(old_url_image);
+        newNamePath = path.join(__dirname, '..', 'public', 'Image', 'products', newImageName);
+
+        if(image) {
             oldImagePath = path.join(__dirname, '..', 'public', 'Image', 'products', image.filename);
-            newImageName = name.trim().replace(/\s+/g, '') + path.extname(image.originalname); // Keep the file extension
+            newImageName = name.trim().replace(/\s+/g, '') + path.extname(image.originalname);
             newImagePath = path.join(__dirname, '..', 'public', 'Image', 'products', newImageName);
         }
 
@@ -131,7 +141,8 @@ module.exports.edit_product = (req, res) => {
                     req.flash('errorMessage', 'Id not found: ' + id)
                 }
                 else {
-                    if (image) {
+                    fs.renameSync(oldNamePath, newNamePath);
+                    if(image) {
                         fs.renameSync(oldImagePath, newImagePath);
                     }
                     req.flash('successMessage', 'Edit product success')
@@ -154,7 +165,7 @@ module.exports.edit_product = (req, res) => {
                     req.flash('errorMessage', 'Name already exists')
                 }
                 else {
-                    req.flash('errorMessage', 'An error has occurred')
+                    req.flash('errorMessage', 'Edit failed, An error has occurred: ' + e.message)
                 }
                 res.redirect('/products')
             })
@@ -187,7 +198,7 @@ module.exports.delete_product = (req, res) => {
                 req.flash('errorMessage', 'Invalid Id')
             }
             else {
-                req.flash('errorMessage', 'An error has occurred')
+                req.flash('errorMessage', 'Delete failed, An error has occurred')
             }
             res.redirect('/products')
         })

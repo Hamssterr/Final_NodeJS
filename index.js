@@ -9,7 +9,7 @@ const cors = require('cors')
 const app = express()
 
 app.use(cookieParser('ptt_nmtt_tnp'));
-app.use(session({ cookie: { maxAge: 60000 } }));
+app.use(session({ cookie: { maxAge: 6000000 } })); // session in 60m = 1h
 app.use(flash());
 
 app.set('view engine', 'ejs')

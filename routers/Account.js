@@ -1,6 +1,7 @@
 const express = require('express')
 const Router = express.Router()
 const multer = require('multer')
+const isAdmin = require('../auth/isAdmin')
 
 const upload = multer({
     dest: 'public/Image/avatars',
@@ -13,25 +14,31 @@ const upload = multer({
 })
 
 const Controller = require('../controller/Account')
+const IsLogin = require('../validators/IsLogin')
+const verifyToken = require('../auth/verifyToken')
 
 Router.get('/login', Controller.login_UI)
 
-Router.post('/login', Controller.login_Submit)
+Router.get('/logout', Controller.logout)
 
-Router.get('/', Controller.get_all_employees)
+Router.post('/login', verifyToken, Controller.login_Submit)
 
-Router.post('/add', upload.single('image'), Controller.add_employee)
+Router.get('/', IsLogin, Controller.get_all_employees)
 
-Router.post('/edit', upload.single('image'), Controller.edit_employee)
+Router.post('/add', isAdmin, upload.single('image'), Controller.add_employee)
 
-Router.post('/delete', Controller.delete_employee)
+Router.post('/edit', isAdmin, upload.single('image'), Controller.edit_employee)
 
-Router.post('/delete-many', upload.none(), Controller.delete_many_employee)
+Router.post('/delete', isAdmin, Controller.delete_employee)
 
-Router.post('/lock', upload.none(), Controller.lock_employee)
+Router.post('/delete-many', isAdmin, upload.none(), Controller.delete_many_employee)
 
-Router.post('/unlock', upload.none(), Controller.unlock_employee)
+Router.post('/lock-unlock', isAdmin, upload.none(), Controller.lock_and_unlock_employee)
 
-Router.post('/resend-email', upload.none(), Controller.resend_email)
+Router.post('/resend-email', isAdmin, upload.none(), Controller.resend_email)
+
+Router.post('/change-password', IsLogin, Controller.change_password)
+
+Router.post('/update-information', IsLogin, upload.single('image'), Controller.update_information)
 
 module.exports = Router

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidebar menu With Sub-menus | Using HTML, CSS & JQuery</title>
+    <title>Home page</title>
     <link rel="stylesheet" href="/Css/Home.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
@@ -102,18 +102,23 @@
 
 
             <!-- ========================= Main ==================== -->
+
+            <% if(errorMessage.length > 0) { %>
+                <p id="errorMessageAlert" class="alert fade show" style="color: red; background-color: aliceblue; font-size: x-large; text-align: center;">
+                    <%= errorMessage %>
+                </p>
+            <% } %>
+
             <div class="main">
 
                 <div class="topbar">
                    <div class="cart-topbar">
                     <a href="/cart">
-                        <i class='fas fa-shopping-bag' style='font-size:36px; color:black'></i>
+                        <i class='fas fa-shopping-bag' style='font-size:70px; color:black'></i>
                     </a>
                    </div>
     
-    
                 </div>
-    
 
                 <div class="container-item">
 
@@ -174,6 +179,13 @@
                 // add product with this id to cart in database
             }
         })
+
+        setTimeout(function() {
+            var errorMessageAlert = document.getElementById('errorMessageAlert');
+            if (errorMessageAlert) {
+                errorMessageAlert.style.display = 'none';
+            }
+        }, 2000);
     </script>
 </body>
 

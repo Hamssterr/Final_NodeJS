@@ -130,6 +130,7 @@ module.exports.add_employee = (req, res) => {
     const role = 'employee'
     const isActive = false
     const status = 'unlock'
+    const isFirst = true
 
     let url_avatar = undefined
     let oldImagePath = undefined
@@ -150,7 +151,7 @@ module.exports.add_employee = (req, res) => {
     const hashed = bcrypt.hashSync(password, 5)
 
     let account = new Account({
-        fullname, email, username, password: hashed, phone, role, isActive, status, url_avatar
+        fullname, email, username, password: hashed, phone, role, isActive, status, url_avatar, isFirst
     })
 
     account.save()
@@ -424,6 +425,7 @@ module.exports.change_password = (req, res) => {
             else {
                 req.flash('successMessage', 'Change password success')
             }
+            req.session.user = a
             res.redirect('/information');
         })
         .catch(e => {
@@ -522,5 +524,40 @@ module.exports.update_information = (req, res) => {
                 req.flash('errorMessage', 'Update failed, an error has occurred')
             }
             res.redirect('/information')
+        })
+}
+
+module.exports.change_password_first_login = (req, res) => {
+
+    const { id, password } = req.body
+
+    if (!id) {
+        return res.json({code: 2, message: 'Please provide id employee'})
+    }
+
+    const hashed = bcrypt.hashSync(password, 5)
+    const isFirst = false
+
+    let dataUpdate = {
+        password: hashed, isFirst
+    }
+
+    Account.findByIdAndUpdate(id, dataUpdate, {
+        new: true
+    })
+        .then(a => {
+            if (!a) {
+                return res.json({code: 2, message: 'Id not found: ' + id})
+            }
+
+            req.session.user = a
+            console.log(req.session.user)
+            return res.json({code: 0, message: 'Change password success'})
+        })
+        .catch(e => {
+            if (e.message.includes('Cast to ObjectId failed')) {
+                return res.json({code: 2, message: 'Invalid Id'})
+            }
+            return res.json({code: 2, message: 'Change password failed, An error has occurred' + e.message})
         })
 }

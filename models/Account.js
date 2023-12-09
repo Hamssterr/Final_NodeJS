@@ -10,7 +10,8 @@ const AccountSchema = new Schema({
     role: String,
     isActive: Boolean,
     status: String,
-    url_avatar: String
+    url_avatar: String,
+    isFirst: Boolean
 })
 
 module.exports = mongoose.model('Account', AccountSchema)

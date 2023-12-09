@@ -41,4 +41,7 @@ Router.post('/change-password', IsLogin, Controller.change_password)
 
 Router.post('/update-information', IsLogin, upload.single('image'), Controller.update_information)
 
+Router.post('/change-password-first-login', upload.none(), Controller.change_password_first_login)
+
+
 module.exports = Router

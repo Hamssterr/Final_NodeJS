@@ -22,10 +22,6 @@ body {
   background-position: center;
 }
 
-/* body {
-  min-height: 100vh;
-  overflow-x: hidden;
-} */
 
 :root {
   --blue: #2a2185;
@@ -414,8 +410,9 @@ th {
 }
 
 td img {
-  width: 100px;
-  height: 100px;
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
 }
 
 th {

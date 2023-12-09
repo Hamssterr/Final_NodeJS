@@ -330,11 +330,28 @@ body{
 
 }
 
-.product-name, .product-price, .product-offer{
+.product-name {
 
-	margin-bottom: 20px;
+	margin-bottom: 15px;
+  
+  color: black;
 
+  font-size: 20px
 }
+
+.product-barcode, .product-price, .product-quantity, .product-total {
+
+	margin-bottom: 15px;
+  
+  color: black;
+
+  font-size: 15px
+}
+
+.product-quantity strong, .product-total strong {
+  color: red;
+}
+
 
 .product-remove{
 
@@ -368,16 +385,6 @@ body{
 
 }
 
-.product-quantity > input{
-
-	width: 40px;
-
-	padding: 5px;
-
-	text-align: center;
-
-}
-
 .fa{
 
 	margin-right: 5px;
@@ -390,9 +397,11 @@ body{
 
 	margin-left: 20px;
 
+  margin-right: 10px;
+
 	padding: 20px;
 
-	height: 240px;
+	height: 100%;
 
 	border: 1px solid silver;
 
@@ -434,4 +443,11 @@ body{
 
 	background-color: red;
 
+}
+
+.product-img {
+  margin-left: 10px;
+  border-radius: 10%;
+  width: 200px;
+  height: 200px;
 }

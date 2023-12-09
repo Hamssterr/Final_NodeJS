@@ -23,6 +23,7 @@ app.use(cors())
 app.use('/', require('./routers/Home'))
 app.use('/accounts', require('./routers/Account'))
 app.use('/products', require('./routers/Product'))
+app.use('/carts', require('./routers/Cart'))
 
 app.use((req, res) => {
     res.json({

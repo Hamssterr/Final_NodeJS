@@ -17,9 +17,32 @@ module.exports.display_products = (req, res) => {
 
     const errorMessage = req.flash('errorMessage') || ''
 
-    Product.find()
+    Product.find().select('-import_price')
         .then(listItems => {
             res.render('Home', { listItems, errorMessage })
+        })
+
+}
+
+module.exports.search_products = (req, res) => {
+
+    let {keyword} = req.body
+    
+    if(!keyword) {
+        keyword = ''
+    }
+
+    Product.find({
+        $or: [
+          { barcode: { $regex: keyword, $options: 'i' } },
+          { name: { $regex: keyword, $options: 'i' } }
+        ]
+      }).select('-import_price')
+        .then(listItems => {
+            return res.json({code: 0, data: listItems})
+        })
+        .catch(e => {
+            return res.json({code: 2, message: 'Get products failed'}) 
         })
 
 }

@@ -23,6 +23,8 @@ Router.get('/logout', Controller.logout)
 
 Router.post('/login', verifyToken, Controller.login_Submit)
 
+Router.get('/list-employees', IsLogin, Controller.list_employess)
+
 Router.get('/', IsLogin, Controller.get_all_employees)
 
 Router.post('/add', isAdmin, upload.single('image'), Controller.add_employee)

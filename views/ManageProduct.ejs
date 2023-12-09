@@ -90,6 +90,11 @@
                                 Manage account
                             </a>
 
+                            <a href="/accounts/list-employees" class="sub-item">
+                                <i class="fas fa-list"></i>
+                                List employees
+                            </a>
+
                             <a href="/information" class="sub-item">
                                 <i class="fas fa-user"></i>
                                 Your information
@@ -156,7 +161,7 @@
                         <tbody>
                             <% listItems.forEach(item => { %>
                                 <tr>
-                                    <td><img src="/Image/products/<%= item.url_image %>" alt="Product Image" style="width: 100%; height: 100px;"></td>
+                                    <td><img src="/Image/products/<%= item.url_image %>" alt="Product Image"></td>
                                     <td><%= item.barcode %></td>
                                     <td><%= item.name %></td>
                                     <td><%= item.import_price %></td>

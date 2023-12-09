@@ -412,3 +412,20 @@ th {
 .form-label {
   margin-bottom: 5px;
 }
+
+td img {
+  width: 100px;
+  height: 100px;
+}
+
+th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}

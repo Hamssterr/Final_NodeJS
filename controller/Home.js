@@ -9,10 +9,7 @@ module.exports.information = (req, res) => {
     res.render('Information', {user: req.session.user, errorMessage, successMessage})
 }
 
-module.exports.cart = (req, res) => {
-    res.render('Cart')
-}
-
 module.exports.check_out = (req, res) => {
+    
     res.render('CheckOut')
 }

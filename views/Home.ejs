@@ -79,6 +79,11 @@
                                 Manage account
                             </a>
 
+                            <a href="/accounts/list-employees" class="sub-item">
+                                <i class="fas fa-list"></i>
+                                List employees
+                            </a>
+
                             <a href="/information" class="sub-item">
                                 <i class="fas fa-user"></i>
                                 Your information
@@ -102,19 +107,40 @@
 
         <!-- ========================= Main ==================== -->
 
-        <% if(errorMessage.length> 0) { %>
+            <% if(errorMessage.length> 0) { %>
             <p id="errorMessageAlert" class="alert fade show"
                 style="color: red; background-color: aliceblue; font-size: x-large; text-align: center;">
                 <%= errorMessage %>
             </p>
             <% } %>
 
+            <p id="messageAlert" class="alert fade show"
+                style="color: red; background-color: aliceblue; font-size: x-large; text-align: center; display: none;">
+                messageAlert
+            </p>
+
+
                 <div class="main">
 
                     <div class="topbar">
+
+                        <div class="search">
+                            <label>
+                                <input id="search" type="text" placeholder="Search here">
+                                <ion-icon name="search-outline"></ion-icon>
+                            </label>
+                        </div>
+
+                        <div class="addcart">
+                            <label>
+                                <input id="valueInput" type="text" placeholder="Barcode or name">
+                                <button id="addBtn">Add to cart</button>
+                            </label>
+                        </div>
+
                         <div class="cart-topbar">
-                            <a href="/cart">
-                                <i class='fas fa-shopping-bag' style='font-size:70px; color:black'></i>
+                            <a href="/carts">
+                                <i class='fas fa-shopping-bag' style='font-size:100px; color:black'></i>
                             </a>
                         </div>
 
@@ -160,7 +186,7 @@
                                 <div class="price">$<%= item.retail_price %>
                                 </div>
                                 <div class="buttons">
-                                    <a data-id="<%= item._id %>" href="#" class="cart">add to cart</a>
+                                    <a data-id="<%= item._id %>" class="cart">add to cart</a>
                                 </div>
                             </div>
                             <% }); %>
@@ -181,13 +207,179 @@
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
     <script>
+
         document.querySelector('.products-preview').addEventListener('click', function (event) {
             if (event.target.classList.contains('cart')) {
                 const itemId = event.target.getAttribute('data-id');
 
-                // add product with this id to cart in database
+                addProductToCart(itemId, '_id')
             }
         })
+
+        document.getElementById('addBtn').addEventListener('click', function (event) {
+
+            let valueInput = document.getElementById('valueInput')
+            let keyword = valueInput.value
+            valueInput.value = ''
+
+            if(!keyword || keyword === '') {
+                return showAndHideMessage('Provide barcode or name', 'red', 1500)
+            }
+
+            addProductToCart(keyword, 'barcode/name')
+
+        });
+
+        function addProductToCart(value, type) {
+            const url = '/carts/add'
+            
+            let form = new FormData();
+
+            form.set('value', value)
+            form.set('type', type)
+
+            let xhr = new XMLHttpRequest();
+
+            xhr.open('POST', url, true)
+
+            xhr.addEventListener('load', e => {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const json = JSON.parse(xhr.responseText)
+
+                    if (json.code === 0) {
+                        return showAndHideMessage(json.message, 'rgb(45, 177, 45)', 1500)
+                    }
+                    else if (json.code === 2) {
+                        return showAndHideMessage(json.message, 'red', 1500)
+                    }
+
+                    return showAndHideMessage('add to cart failed', 'red', 1500)
+
+                }
+            })
+
+            xhr.send(form)
+        }
+
+
+        let debounceTimer;
+        document.getElementById('search').addEventListener('input', function (event) {
+
+            clearTimeout(debounceTimer);
+
+            debounceTimer = setTimeout(function () {
+                let keyword = event.target.value;
+
+                if (!keyword) {
+                    keyword = ''
+                }
+
+                sendFormWithUrl('/search-products', keyword)
+            }, 300);
+
+        });
+
+        function sendFormWithUrl(url, keyword) {
+            let form = new FormData();
+
+            form.set('keyword', keyword)
+
+            let xhr = new XMLHttpRequest();
+
+            xhr.open('POST', url, true)
+
+            xhr.addEventListener('load', e => {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const json = JSON.parse(xhr.responseText)
+
+                    if (json.code === 0) {
+                        const data = json.data
+                        displayProducts(data)
+                    }
+                    else if (json.code === 2) {
+                        console.log(json.message)
+                    }
+                    else {
+                        console.log('search products failed')
+                    }
+                }
+            })
+
+            xhr.send(form)
+        }
+
+        function displayProducts(listProducts) {
+
+            let containerItems = document.querySelector('.products-container');
+            let containerPreview = document.querySelector('.products-preview');
+            containerItems.innerHTML = '';
+            containerPreview.innerHTML = '';
+
+            listProducts.forEach(product => {
+                const containerHTML = `
+                        <div class="product" data-name="${product._id}">
+                            <div>
+                                <img class="img-item" src="/Image/products/${product.url_image}" alt="">
+                            </div>
+                            <h3>${product.name}</h3>
+                            <div class="price">$${product.retail_price}</div>
+                        </div>
+                    `
+
+                const previewHTML = `
+                            <div class="preview" data-target="${product._id}">
+                                <i class="fas fa-times"></i>
+                                <img class="img-item2" src="/Image/products/${product.url_image}" alt="">
+                                <h3>
+                                    ${product.name}
+                                </h3>
+                                <p>Barcode: ${product.barcode}
+                                </p>
+                                <p>Category: ${product.category}
+                                </p>
+                                <p>Date creation: ${product.creation_date}
+                                </p>
+                                <div class="price">$${product.retail_price}
+                                </div>
+                                <div class="buttons">
+                                    <a data-id="${product._id}" href="#" class="cart">add to cart</a>
+                                </div>
+                            </div>
+                    `
+
+                containerItems.innerHTML += containerHTML;
+                containerPreview.innerHTML += previewHTML;
+            });
+
+            previewProducts()
+        }
+
+        function previewProducts() {
+            let preveiwContainer = document.querySelector(".products-preview");
+            if (preveiwContainer) {
+                let previewBox = preveiwContainer.querySelectorAll(".preview");
+
+                document.querySelectorAll(".products-container .product").forEach((product) => {
+                    product.onclick = () => {
+                        preveiwContainer.style.display = "flex";
+                        let name = product.getAttribute("data-name");
+                        previewBox.forEach((preview) => {
+                            let target = preview.getAttribute("data-target");
+                            if (name == target) {
+                                preview.classList.add("active");
+                            }
+                        });
+                    };
+                });
+
+                previewBox.forEach((close) => {
+                    close.querySelector(".fa-times").onclick = () => {
+                        close.classList.remove("active");
+                        preveiwContainer.style.display = "none";
+                    };
+                });
+            }
+        }
 
         setTimeout(function () {
             var errorMessageAlert = document.getElementById('errorMessageAlert');
@@ -195,6 +387,25 @@
                 errorMessageAlert.style.display = 'none';
             }
         }, 2000);
+    
+        function showAndHideMessage(messageContent, rgbaColor, duration) {
+            var messageAlert = document.getElementById('messageAlert');
+
+            if (messageAlert) {
+                messageAlert.innerHTML = messageContent;
+
+                if (rgbaColor) {
+                    messageAlert.style.color = rgbaColor;
+                }
+                messageAlert.style.display = 'block';
+
+                setTimeout(function () {
+                    messageAlert.style.display = 'none';
+
+                }, duration);
+            }
+        }
+
     </script>
 </body>
 

@@ -16,4 +16,4 @@ const AccountSchema = new Schema({
 
 module.exports = mongoose.model('Account', AccountSchema)
 
-//fullname, email, username, phone, role, isActive, status, url_avatar
+//fullname, email, username, phone, role, isActive, status, url_avatar, isFirst

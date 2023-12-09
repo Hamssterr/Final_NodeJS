@@ -93,6 +93,19 @@ module.exports.login_Submit = (req, res) => {
         })
 }
 
+module.exports.list_employess = (req, res) => {
+
+    if(req.session.user.role !== 'admin') {
+        req.flash('errorMessage', 'Only admin is allowed')
+        return res.redirect('/')
+    }
+
+    Account.find({ role: { $ne: 'admin' } })
+        .then(listEmployees => {
+            res.render('ListEmployees', { listEmployees})
+        })
+}
+
 module.exports.get_all_employees = (req, res) => {
 
     if(req.session.user.role !== 'admin') {
@@ -103,7 +116,7 @@ module.exports.get_all_employees = (req, res) => {
     const errorMessage = req.flash('errorMessage') || ''
     const successMessage = req.flash('successMessage') || ''
 
-    Account.find()
+    Account.find({ role: { $ne: 'admin' } })
         .then(listEmployees => {
             res.render('ManageAccount', { listEmployees, errorMessage, successMessage })
         })
@@ -551,7 +564,6 @@ module.exports.change_password_first_login = (req, res) => {
             }
 
             req.session.user = a
-            console.log(req.session.user)
             return res.json({code: 0, message: 'Change password success'})
         })
         .catch(e => {

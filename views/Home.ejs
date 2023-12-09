@@ -18,150 +18,159 @@
 </head>
 
 <body>
+
     <div class="container">
         <!-- =============== Navigation ================ -->
-        <div class="container">
-            <!-- =============== Navigation ================ -->
-            <div class="navigation">
-                <div class="menu-btn">
-                    <ion-icon name="menu-outline"></ion-icon>
-                </div>
-
-                <div class="side-bar">
-                    <header>
-                        <div class="close-btn">
-                            <ion-icon name="close-outline"></ion-icon>
-                        </div>
-                        <img class="logo-leftbar" src="/Image/Apple.jpg" alt="">
-                        <h1>Apple Store</h1>
-                    </header>
-
-                    <div class="menu">
-
-                        <div class="item">
-                            <a href="/dashboard">
-                                <i class="far fa-eye"></i>
-                                Dashboard
-                            </a>
-                        </div>
-
-                        <div class="item">
-                            <a href="/">
-                                <i class="fas fa-house-user"></i>
-                                Home
-                            </a>
-                        </div>
-
-                        <div class="item">
-                            <a class="sub-btn">
-                                <i class="fas fa-box-open"></i>
-                                Products
-                                <i class="fas fa-angle-right dropdown"></i>
-                            </a>
-
-                            <div class="sub-menu">
-                                <a href="/products" class="sub-item">
-                                    <i class="far fa-clipboard"></i>
-                                    Manage Production
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="item">
-                            <a class="sub-btn">
-                                <i class="fas fa-user-lock"></i>
-                                Account
-                                <i class="fas fa-angle-right dropdown"></i>
-                            </a>
-
-                            <div class="sub-menu">
-                                <a href="/accounts" class="sub-item">
-                                    <i class="far fa-plus-square"></i>
-                                    Manage account
-                                </a>
-
-                                <a href="#" class="sub-item">
-                                    <i class="fas fa-sync"></i>
-                                    Re-send Email
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="item">
-                            <a href="/check-out">
-                                <i class="fab fa-apple-pay" style='font-size:20px'></i>
-                                Check Out
-                            </a>
-                        </div>
-
-                        <div class="item"><a href="#"><i class="fas fa-info-circle"></i>About</a></div>
-                    </div>
-                </div>
-
+        <div class="navigation">
+            <div class="menu-btn">
+                <ion-icon name="menu-outline"></ion-icon>
             </div>
 
+            <div class="side-bar">
+                <header>
+                    <div class="close-btn">
+                        <ion-icon name="close-outline"></ion-icon>
+                    </div>
+                    <img class="logo-leftbar" src="/Image/Apple.jpg" alt="">
+                    <h1>Apple Store</h1>
+                </header>
 
-            <!-- ========================= Main ==================== -->
+                <div class="menu">
 
-            <% if(errorMessage.length > 0) { %>
-                <p id="errorMessageAlert" class="alert fade show" style="color: red; background-color: aliceblue; font-size: x-large; text-align: center;">
-                    <%= errorMessage %>
-                </p>
-            <% } %>
-
-            <div class="main">
-
-                <div class="topbar">
-                   <div class="cart-topbar">
-                    <a href="/cart">
-                        <i class='fas fa-shopping-bag' style='font-size:70px; color:black'></i>
-                    </a>
-                   </div>
-    
-                </div>
-
-                <div class="container-item">
-
-                    <h3 class="title-item"> Apple Productions </h3>
-
-                    <div class="products-container">
-
-                        <% listItems.forEach(item => { %>
-                            <div class="product" data-name="<%= item._id %>">
-                                <div>
-                                    <img class="img-item" src="/Image/products/<%= item.url_image %>" alt="">
-                                </div>
-                                <h3><%= item.name %></h3>
-                                <div class="price">$<%= item.retail_price %></div>
-                            </div>
-                        <% }); %>
+                    <div class="item">
+                        <a href="/dashboard">
+                            <i class="far fa-eye"></i>
+                            Dashboard
+                        </a>
                     </div>
 
-                </div>
+                    <div class="item">
+                        <a href="/">
+                            <i class="fas fa-house-user"></i>
+                            Home
+                        </a>
+                    </div>
 
-                <div class="products-preview">
+                    <div class="item">
+                        <a class="sub-btn">
+                            <i class="fas fa-box-open"></i>
+                            Products
+                            <i class="fas fa-angle-right dropdown"></i>
+                        </a>
 
-                    <% listItems.forEach(item => { %>
-                        <div class="preview" data-target="<%= item._id %>">
-                            <i class="fas fa-times"></i>
-                            <img class="img-item2" src="/Image/products/<%= item.url_image %>" alt="">
-                            <h3><%= item.name %></h3>
-                            <p>Barcode: <%= item.barcode %></p>
-                            <p>Category: <%= item.category %></p>
-                            <p>Date creation: <%= item.creation_date %></p>
-                            <div class="price">$<%= item.retail_price %></div>
-                            <div class="buttons">
-                                <a data-id="<%= item._id %>" href="#" class="cart">add to cart</a>
-                            </div>
+                        <div class="sub-menu">
+                            <a href="/products" class="sub-item">
+                                <i class="far fa-clipboard"></i>
+                                Manage Production
+                            </a>
                         </div>
-                    <% }); %>
-                </div>
+                    </div>
 
+                    <div class="item">
+                        <a class="sub-btn">
+                            <i class="fas fa-user-lock"></i>
+                            Account
+                            <i class="fas fa-angle-right dropdown"></i>
+                        </a>
+
+                        <div class="sub-menu">
+                            <a href="/accounts" class="sub-item">
+                                <i class="far fa-plus-square"></i>
+                                Manage account
+                            </a>
+
+                            <a href="/information" class="sub-item">
+                                <i class="fas fa-user"></i>
+                                Your information
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <a href="/check-out">
+                            <i class="fab fa-apple-pay" style='font-size:20px'></i>
+                            Check Out
+                        </a>
+                    </div>
+
+                    <div class="item"><a href="/accounts/logout"><i class='fas fa-sign-out-alt'></i>Logout</a></div>
+                </div>
             </div>
 
         </div>
 
+
+        <!-- ========================= Main ==================== -->
+
+        <% if(errorMessage.length> 0) { %>
+            <p id="errorMessageAlert" class="alert fade show"
+                style="color: red; background-color: aliceblue; font-size: x-large; text-align: center;">
+                <%= errorMessage %>
+            </p>
+            <% } %>
+
+                <div class="main">
+
+                    <div class="topbar">
+                        <div class="cart-topbar">
+                            <a href="/cart">
+                                <i class='fas fa-shopping-bag' style='font-size:70px; color:black'></i>
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="container-item">
+
+                        <h3 class="title-item"> Apple Productions </h3>
+
+                        <div class="products-container">
+
+                            <% listItems.forEach(item=> { %>
+                                <div class="product" data-name="<%= item._id %>">
+                                    <div>
+                                        <img class="img-item" src="/Image/products/<%= item.url_image %>" alt="">
+                                    </div>
+                                    <h3>
+                                        <%= item.name %>
+                                    </h3>
+                                    <div class="price">$<%= item.retail_price %>
+                                    </div>
+                                </div>
+                                <% }); %>
+                        </div>
+
+                    </div>
+
+                    <div class="products-preview">
+
+                        <% listItems.forEach(item=> { %>
+                            <div class="preview" data-target="<%= item._id %>">
+                                <i class="fas fa-times"></i>
+                                <img class="img-item2" src="/Image/products/<%= item.url_image %>" alt="">
+                                <h3>
+                                    <%= item.name %>
+                                </h3>
+                                <p>Barcode: <%= item.barcode %>
+                                </p>
+                                <p>Category: <%= item.category %>
+                                </p>
+                                <p>Date creation: <%= item.creation_date %>
+                                </p>
+                                <div class="price">$<%= item.retail_price %>
+                                </div>
+                                <div class="buttons">
+                                    <a data-id="<%= item._id %>" href="#" class="cart">add to cart</a>
+                                </div>
+                            </div>
+                            <% }); %>
+                    </div>
+
+                </div>
+
     </div>
+
+
 
 
     <!--======= JavaScript =============  -->
@@ -175,12 +184,12 @@
         document.querySelector('.products-preview').addEventListener('click', function (event) {
             if (event.target.classList.contains('cart')) {
                 const itemId = event.target.getAttribute('data-id');
-                
+
                 // add product with this id to cart in database
             }
         })
 
-        setTimeout(function() {
+        setTimeout(function () {
             var errorMessageAlert = document.getElementById('errorMessageAlert');
             if (errorMessageAlert) {
                 errorMessageAlert.style.display = 'none';

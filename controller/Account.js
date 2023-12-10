@@ -151,15 +151,19 @@ module.exports.add_employee = (req, res) => {
     let newImagePath = undefined
 
     if (!image) {
-        url_avatar = 'avatar_default.png'
+        const defaultName = 'default.png'
+
+        oldImagePath = path.join(__dirname, '..', 'public', 'Image', 'avatars', defaultName);
+        newImageName = username.trim().replace(/\s+/g, '') + path.extname(defaultName);
     }
     else {
         oldImagePath = path.join(__dirname, '..', 'public', 'Image', 'avatars', image.filename);
         newImageName = username.trim().replace(/\s+/g, '') + path.extname(image.originalname);
-        newImagePath = path.join(__dirname, '..', 'public', 'Image', 'avatars', newImageName);
-
-        url_avatar = newImageName;
     }
+
+    newImagePath = path.join(__dirname, '..', 'public', 'Image', 'avatars', newImageName);
+
+    url_avatar = newImageName;
 
     const hashed = bcrypt.hashSync(password, 5)
 
@@ -169,7 +173,10 @@ module.exports.add_employee = (req, res) => {
 
     account.save()
         .then(() => {
-            if (image) {
+            if(!image) {
+                fs.copyFileSync(oldImagePath, newImagePath)
+            }
+            else {
                 fs.renameSync(oldImagePath, newImagePath);
             }
 
@@ -237,7 +244,6 @@ module.exports.edit_employee = (req, res) => {
 
     const hashed = bcrypt.hashSync(username, 5)
     const password = hashed
-    console.log(password)
 
     let dataUpdate = {
         fullname, email, username, password, phone, url_avatar

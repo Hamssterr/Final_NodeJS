@@ -81,15 +81,19 @@ module.exports.add_product = (req, res) => {
         let image = req.file
 
         if (!image) {
-            url_image = 'default.png'
+            const defaultName = 'default.png'
+
+            oldImagePath = path.join(__dirname, '..', 'public', 'Image', 'products', defaultName);
+            newImageName = name.trim().replace(/\s+/g, '') + path.extname(defaultName);
         }
         else {
             oldImagePath = path.join(__dirname, '..', 'public', 'Image', 'products', image.filename);
-            newImageName = name.trim().replace(/\s+/g, '') + path.extname(image.originalname); // Keep the file extension
-            newImagePath = path.join(__dirname, '..', 'public', 'Image', 'products', newImageName);
-
-            url_image = newImageName;
+            newImageName = name.trim().replace(/\s+/g, '') + path.extname(image.originalname);
         }
+
+        newImagePath = path.join(__dirname, '..', 'public', 'Image', 'products', newImageName);
+
+        url_image = newImageName;
 
         let product = new Product({
             barcode, name, import_price, retail_price, category, creation_date, url_image
@@ -97,7 +101,10 @@ module.exports.add_product = (req, res) => {
 
         product.save()
             .then(() => {
-                if (image) {
+                if(!image) {
+                    fs.copyFileSync(oldImagePath, newImagePath)
+                }
+                else {
                     fs.renameSync(oldImagePath, newImagePath);
                 }
 

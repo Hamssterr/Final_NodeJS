@@ -91,7 +91,7 @@
                     </div>
 
                     <div class="item">
-                        <a href="/check-out">
+                        <a href="/carts/check-out">
                             <i class="fab fa-apple-pay" style='font-size:20px'></i>
                             Check Out
                         </a>
@@ -104,18 +104,12 @@
         </div>
 
 
-         <!-- ===================== Main ================== -->
+        <!-- ===================== Main ================== -->
         <div class="main">
             <div class="topbar">
-                <div class="search">
-                    <label>
-                        <input type="text" placeholder="Search here">
-                        <ion-icon name="search-outline"></ion-icon>
-                    </label>
-                </div>
-        
-        
-        
+
+                <button id="homeBtn"><i class="fa fa-home"></i> Home</button>
+
                 <div class="action">
                     <div class="profile">
                         <img class="topbar-img" src="/Image/avatars/<%= user.url_avatar %>" alt="Profile Image">
@@ -131,10 +125,10 @@
                                 Role: <%= user.role %>
                             </div>
                         </h3>
-                        
+
                         <ul>
                             <li>
-                                
+
                                 <a href="/accounts/logout">
                                     Log Out
                                     <i class='fas fa-sign-out-alt'></i>
@@ -143,69 +137,57 @@
                         </ul>
                     </div>
                 </div>
-                  
-    
-            </div>     
-            
-            
+
+            </div>
+
+
             <div class="detailsTable">
                 <div class="Orders">
                     <div class="cardHeaderDetails">
-                        <h2>Recent Orders</h2>
+                        <h2>Recent Order</h2>
+                        <% if(justPaid.length > 0) { %>
+                            <p><i class="fa fa-phone"></i> Customer Phone: <strong><%= order.customerPhone %></strong></p>
+                            <p><i class="fas fa-user-tie"></i> Customer's Name: <strong><%= order.customerName %></strong></p>
+                            <p><i class="fa fa-address-card"></i> Customer's Address: <strong><%= order.customerAddress %></strong></p>
+                            <p><i class="fas fa-plus-circle"></i> Quantity of products: <strong><%= order.totalQuantity %></strong></p>
+                            <p><i class="fas fa-dollar-sign"></i> Total price: <strong>$ <%= order.totalPrice %></strong></p>
+                            <p><i class="fas fa-money-bill-wave"></i> Money received: <strong>$ <%= order.received %></strong></p>
+                            <p><i class="fas fa-money-bill-wave"></i> Total price: <strong>$ <%= order.refunds %></strong></p>
+                            <p><i class="far fa-calendar"></i> Date creation: <strong><%= order.creation_date %></strong></p>
+                        <% } else { %>
+                            <p style="margin-top: 10px;">There are no orders that have been paid yet</p>
+                        <% } %>
                     </div>
-    
-                    <table>
-                        <thead>
-                            <tr>
-                                <td>Name</td>
-                                <td>Price</td>
-                                <td>Payment</td>
-                                <td>Status</td>
-                            </tr>
-                        </thead>
-    
-                        <tbody>
-                            <tr>
-                                <td>iPhone 15 pro max</td>
-                                <td>$1499</td>
-                                <td>Paid</td>
-                                <td><span class="Compelete">Compelete</span></td>
-                            </tr>
-    
-                            <tr>
-                                <td>iPhone 14 pro max</td>
-                                <td>$1399</td>
-                                <td>Credit Card</td>
-                                <td><span class="Compelete">Compelete</span></td>
-                            </tr>
-    
-                            <tr>
-                                <td>Apple Watch series 9</td>
-                                <td>$700</td>
-                                <td>Paid</td>
-                                <td><span class="Compelete">Compelete</span></td>
-                            </tr>
-    
-                            <tr>
-                                <td>AirPod pro 2</td>
-                                <td>$300</td>
-                                <td>Paid</td>
-                                <td><span class="Compelete">Compelete</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+                    <% if(justPaid.length > 0) { %>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>Product Name</td>
+                                    <td>Quantity</td>
+                                    <td>Total Price</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                    <% detailsOrder.forEach(detail=> { %>
+                                        <tr>
+                                            <td><%= detail.productName %></td>
+                                            <td><%= detail.quantity %></td>
+                                            <td>$ <%= detail.totalPrice %></td>
+                                        </tr>
+                                    <% }); %>
+                            </tbody>
+                        </table>
+                    <% }; %>
                 </div>
             </div>
         </div>
 
 
-
-
-
-
     </div>
 
-    
+
     <!--======= JavaScript =============  -->
     <script src="/Style/main.js"></script>
 
@@ -213,9 +195,13 @@
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
+    <script>
+        document.getElementById('homeBtn').addEventListener('click', function(event) {
+            window.location.href = '/'
+        })
+    </script>
 
 
-  
 
 </body>
 

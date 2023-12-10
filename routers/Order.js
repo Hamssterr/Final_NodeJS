@@ -12,15 +12,9 @@ const upload = multer({
     }, limits: { fileSize: 500000 }
 })
 
-const Controller = require('../controller/Cart')
+const Controller = require('../controller/Order')
 const IsLogin = require('../validators/IsLogin')
 
-Router.post('/add', IsLogin, upload.none(), Controller.add_cart)
-
-Router.get('/', IsLogin, Controller.get_cart)
-
-Router.post('/delete', IsLogin, upload.none(), Controller.delete_cart)
-
-Router.get('/check-out', IsLogin, Controller.display_payment)
+Router.post('/add', IsLogin, upload.none(), Controller.add_order)
 
 module.exports = Router

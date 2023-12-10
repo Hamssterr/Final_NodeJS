@@ -2,7 +2,6 @@ const Account = require('../models/Account')
 const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
 
 const validator = require('../validators/Account')
 const createToken = require('../auth/createToken_sendEmail')

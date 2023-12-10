@@ -114,3 +114,20 @@ module.exports.delete_cart = (req, res) => {
     });
 
 }
+
+module.exports.display_payment = (req, res) => {
+
+    const employeeName = req.session.user.fullname
+
+    Cart.find({ employeeName })
+    .then(carts => {
+        let totalQuantity = 0
+        let totalPrice = 0
+        carts.forEach(cart => {
+            totalQuantity += cart.quantity
+            totalPrice += cart.totalPrice
+        })
+
+        res.render('CheckOut', {listCarts: carts, employeeName, totalQuantity, totalPrice})
+    })
+}

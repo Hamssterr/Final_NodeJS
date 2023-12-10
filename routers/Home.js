@@ -24,6 +24,4 @@ Router.get('/dashboard', IsLogin, HomeController.dashboard)
 
 Router.get('/information', IsLogin, HomeController.information)
 
-Router.get('/check-out', IsLogin, HomeController.check_out)
-
 module.exports = Router

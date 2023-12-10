@@ -257,8 +257,8 @@ h1 {
   margin: 0 -16px;
 }
 
-.col-25 {
-  -ms-flex: 25%; 
+.col-40 {
+  -ms-flex: 40%; 
   flex: 5%;
 }
 
@@ -267,14 +267,14 @@ h1 {
   flex: 50%;
 }
 
-.col-75 {
-  -ms-flex: 75%; 
-  flex: 75%;
+.col-60 {
+  -ms-flex: 60%; 
+  flex: 60%;
 }
 
-.col-25,
+.col-40,
 .col-50,
-.col-75 {
+.col-60 {
   padding: 0 16px;
 }
 
@@ -347,7 +347,7 @@ span.price {
   .row {
     flex-direction: column-reverse;
   }
-  .col-25 {
+  .col-40 {
     margin-bottom: 20px;
   }
 }
@@ -373,16 +373,31 @@ span.price {
   font-weight: bold;
   font-size: 20px;
   border: 1px solid #4CAF50;
+  border-radius: 10px;
 }
 
 .container-checkout button {
   margin-top: 10px;
-  padding: 10px;
+  padding: 15px;
   width: 100%;
   font-size: 20px;
   background-color: #4CAF50;
+  border-radius: 10px;
 }
 
 .container-cart {
   margin-right: 10%;
+}
+
+#phoneDiv {
+  white-space: nowrap;
+}
+
+#phone {
+  width: 70%;
+}
+
+#searchBtn {
+  width: 30%;
+  padding: 15px;
 }

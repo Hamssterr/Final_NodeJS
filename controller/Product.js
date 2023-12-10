@@ -1,4 +1,5 @@
 const Product = require('../models/Product')
+const DetailsOrder = require('../models/DetailsOrder')
 const multer = require('multer')
 const fs = require('fs');
 const path = require('path');
@@ -17,7 +18,7 @@ module.exports.display_products = (req, res) => {
 
     const errorMessage = req.flash('errorMessage') || ''
 
-    Product.find().select('-import_price')
+    Product.find().select('-import_price').sort('barcode')
         .then(listItems => {
             res.render('Home', { listItems, errorMessage })
         })
@@ -59,7 +60,7 @@ module.exports.get_all_products = (req, res) => {
         const errorMessage = req.flash('errorMessage') || ''
         const successMessage = req.flash('successMessage') || ''
     
-        Product.find()
+        Product.find().sort('barcode')
             .then(listItems => {
                 res.render('ManageProduct', { listItems, errorMessage, successMessage })
             })
@@ -210,26 +211,52 @@ module.exports.delete_product = (req, res) => {
         res.redirect('/products')
     }
 
-    Product.findByIdAndDelete(id)
-        .then(p => {
-            if (!p) {
-                req.flash('errorMessage', 'Id not found: ' + id)
-            }
-            else {
-                const { url_image } = p
-                const imagePath = path.join(__dirname, '..', 'public', 'Image', 'products', url_image);
-                fs.unlinkSync(imagePath)
-                req.flash('successMessage', 'Delete product success')
-            }
+    Product.findById(id)
+    .then(p => {
+        if (!p) {
+            req.flash('errorMessage', 'Id not found: ' + id)
             res.redirect('/products');
-        })
-        .catch(e => {
-            if (e.message.includes('Cast to ObjectId failed')) {
-                req.flash('errorMessage', 'Invalid Id')
-            }
-            else {
+        }
+        else {
+            DetailsOrder.findOne({productBarcode: p.barcode})
+            .then(detail => {
+                if(detail) {
+                    req.flash('errorMessage', 'Product is in the order')
+                    res.redirect('/products');
+                }
+                else {
+                    Product.findByIdAndDelete(id)
+                    .then(p => {
+                        if (!p) {
+                            req.flash('errorMessage', 'Id not found: ' + id)
+                        }
+                        else {
+                            const { url_image } = p
+                            const imagePath = path.join(__dirname, '..', 'public', 'Image', 'products', url_image);
+                            fs.unlinkSync(imagePath)
+                            req.flash('successMessage', 'Delete product success')
+                        }
+                        res.redirect('/products');
+                    })
+                    .catch(e => {
+                        req.flash('errorMessage', 'Delete failed, An error has occurred')
+                        res.redirect('/products')
+                    })
+                }
+            })
+            .catch(e => {
                 req.flash('errorMessage', 'Delete failed, An error has occurred')
-            }
-            res.redirect('/products')
-        })
+                res.redirect('/products')
+            })
+        }
+    })
+    .catch(e => {
+        if (e.message.includes('Cast to ObjectId failed')) {
+            req.flash('errorMessage', 'Invalid Id')
+        }
+        else {
+            req.flash('errorMessage', 'Delete failed, An error has occurred')
+        }
+        res.redirect('/products')
+    })
 }

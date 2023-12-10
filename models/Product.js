@@ -13,4 +13,4 @@ const ProductSchema = new Schema({
 
 module.exports = mongoose.model('Product', ProductSchema)
 
-//barcode, product name, import price, retail price, category, creation date, url_image
+//barcode, name, import price, retail price, category, creation date, url_image

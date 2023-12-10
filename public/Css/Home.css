@@ -241,6 +241,11 @@ header{
   color: white;
 }
 
+.addcart label button:hover {
+  background-color: #cbb10d;
+  color: white;
+}
+
 .cart-topbar{
   margin-top: 50px;
   margin-left: 10px;

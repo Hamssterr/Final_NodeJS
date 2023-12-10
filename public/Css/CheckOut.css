@@ -173,11 +173,15 @@ header{
 
 .topbar {
   width: 100%;
-  height: 60px;
+  /* height: 60px; */
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 10px;
+}
+
+.cart-topbar {
+  margin-left: 95%;
 }
 
 
@@ -348,8 +352,37 @@ span.price {
   }
 }
 
+.container-checkout {
+  font-size: 20px;
+  margin-left: 10%;
+}
 
+.container-checkout p {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 
+.container-checkout p strong{
+  color: red;
+}
 
+.container-checkout input {
+  padding: 15px;
+  width: 100%;
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 20px;
+  border: 1px solid #4CAF50;
+}
 
+.container-checkout button {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  font-size: 20px;
+  background-color: #4CAF50;
+}
 
+.container-cart {
+  margin-right: 10%;
+}

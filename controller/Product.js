@@ -73,7 +73,8 @@ module.exports.add_product = (req, res) => {
     uploader(req, res, err => {
         const { barcode, name, import_price, retail_price, category } = req.body
 
-        const creation_date = new Date().toLocaleDateString();
+        let creation_date = new Date();
+        creation_date = formatDateString(creation_date.toLocaleDateString());
         let url_image = undefined
         let oldImagePath = undefined
         let newImageName = undefined
@@ -138,7 +139,8 @@ module.exports.edit_product = (req, res) => {
     uploader(req, res, err => {
         const { id, barcode, name, import_price, retail_price, category, url_image: old_url_image } = req.body
 
-        const creation_date = new Date().toLocaleDateString();
+        let creation_date = new Date();
+        creation_date = formatDateString(creation_date.toLocaleDateString());
         let url_image = undefined
         let oldNamePath = undefined
         let newNamePath = undefined
@@ -259,4 +261,17 @@ module.exports.delete_product = (req, res) => {
         }
         res.redirect('/products')
     })
+}
+
+function formatDateString(inputDateString) {
+    let dateObject = new Date(inputDateString);
+
+    let day = dateObject.getDate();
+    let month = dateObject.getMonth() + 1;
+    let year = dateObject.getFullYear();
+
+    //"MM/DD/YYYY"
+    let formattedDate = `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}/${year}`;
+
+    return formattedDate;
 }

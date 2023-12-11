@@ -2,15 +2,17 @@ const Customer = require('../models/Customer')
 const Order = require('../models/Order')
 const Cart = require('../models/Cart')
 const DetailsOrder = require('../models/DetailsOrder')
+const Product = require('../models/Product')
 
 module.exports.add_order = (req, res) => {
     
-    const {customerPhone, totalQuantity, totalPrice, customerName, customerAddress, received, refunds, firstPayment} = req.body
+    const {customerPhone, totalQuantity, totalPrice, customerName, customerAddress, received, refunds} = req.body
     const name = customerName
     const phone = customerPhone
     const address = customerAddress
     const employeeName = req.session.user.fullname
-    const creation_date = new Date().toLocaleDateString();
+    let creation_date = new Date();
+    creation_date = formatDateString(creation_date.toLocaleDateString());
 
     Customer.findOne({phone: phone}).then(customer => {
         if(!customer) {
@@ -99,6 +101,145 @@ module.exports.add_order = (req, res) => {
 }
 
 module.exports.history_customer = (req, res) => {
-    const {customerPhone} = req.body
-    return res.json({code: 0, message: 'Phone = ' + customerPhone})
+    const {customerPhone, receivedInput} = req.body
+
+    Order.find({ customerPhone })
+    .then(orders => {
+
+        const totalOrder = orders.length
+        let totalQuantity = 0
+        let totalPayment = 0
+        let totalReceived = 0
+        let totalRefunds = 0
+
+        orders.forEach(order => {
+            totalQuantity += order.totalQuantity
+            totalPayment += order.totalPrice
+            totalReceived += order.received
+            totalRefunds += order.refunds
+        })
+
+        req.session.customerPhone = customerPhone
+        req.session.received = receivedInput
+        return res.render('HistoryCustomer', {listOrders: orders, totalOrder, totalQuantity, totalPayment, totalReceived, totalRefunds})
+    })
+}
+
+module.exports.report = async (req, res) => {
+
+    let {timeRange, startDate, endDate, sortBy} = req.body
+
+    let dateCondition = {};
+
+    let fromDate = new Date()
+    let toDate = new Date()
+    
+    if(timeRange) {
+
+        if(timeRange === 'custom') {
+            if(startDate && endDate) {
+                fromDate = new Date(startDate);
+                toDate = new Date(endDate);
+                fromDate = formatDateString(fromDate.toLocaleDateString());
+                toDate = formatDateString(toDate.toLocaleDateString());
+                dateCondition = { creation_date: { $gte: fromDate, $lte: toDate } };
+            }
+        }
+        else {
+            if(timeRange !== 'all') {
+                if(timeRange === 'today') {
+                    fromDate.setDate(fromDate.getDate() - 0);
+                    toDate.setDate(fromDate.getDate() - 0);
+                }
+                else if(timeRange === 'yesterday') {
+                    fromDate.setDate(fromDate.getDate() - 1);
+                    toDate.setDate(toDate.getDate() -1);
+                }
+                else if(timeRange === '7days') {
+                    fromDate.setDate(fromDate.getDate() - 7);
+                }
+                else if(timeRange === '30days') {
+                    fromDate.setDate(fromDate.getDate() - 30);
+                }
+                fromDate = formatDateString(fromDate.toLocaleDateString());
+                toDate = formatDateString(toDate.toLocaleDateString());
+                dateCondition = { creation_date: { $gte: fromDate, $lte: toDate } };
+            }
+        }
+    }
+
+    let totalOrder = 0
+    let totalQuantity = 0
+    let totalPayment = 0
+    let totalReceived = 0
+    let totalRefunds = 0
+    let capital = 0
+
+    let sortCondition = {}
+
+    if(sortBy) {
+        if(sortBy === 'creation_date') {
+            sortCondition = { creation_date: 1 }
+        }
+        else if(sortBy === 'totalQuantity') {
+            sortCondition = { totalQuantity: 1 }
+        }
+        else if(sortBy === 'totalPrice') {
+            sortCondition = { totalPrice: 1 }
+        }
+    }
+
+    const orders = await Order.find(dateCondition).sort(sortCondition);
+
+    totalOrder = orders.length
+
+    const detailsPromises = orders.map(order => {
+
+        totalQuantity += order.totalQuantity
+        totalPayment += order.totalPrice
+        totalReceived += order.received
+        totalRefunds += order.refunds
+
+        return DetailsOrder.find({ orderId: order._id }).then(details => {
+            return Promise.all(
+                details.map(detail => {
+                    return Product.findOne({ barcode: detail.productBarcode }).then(product => {
+                        capital = capital + detail.quantity * product.import_price;
+                    });
+                })
+            );
+        });
+    });
+
+    await Promise.all(detailsPromises);
+
+    const proceeds = totalPayment
+    const profit = proceeds - capital
+    return res.render('ReportOrder', {role: req.session.user.role ,listOrders: orders, totalOrder, totalQuantity, totalPayment, 
+        totalReceived, totalRefunds, timeRange, startDate, endDate, sortBy, proceeds, capital, profit})
+}
+
+module.exports.details = (req, res) => {
+    const {orderId} = req.body
+
+    DetailsOrder.find({ orderId })
+    .then(details => {
+        return res.json({code: 0, data: details})
+    })
+    .catch(e => {
+        return res.json({code: 2, message: 'View details order failed'})
+    })
+}
+
+function formatDateString(inputDateString) {
+    let dateObject = new Date(inputDateString);
+
+    let day = dateObject.getDate();
+    let month = dateObject.getMonth() + 1;
+    let year = dateObject.getFullYear();
+
+    //"MM/DD/YYYY"
+    let formattedDate = `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}/${year}`;
+
+    return formattedDate;
 }

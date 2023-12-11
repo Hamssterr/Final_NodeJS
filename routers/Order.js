@@ -20,4 +20,8 @@ Router.post('/add', IsLogin, upload.none(), Controller.add_order)
 
 Router.post('/history-customer', IsLogin, Controller.history_customer)
 
+Router.post('/details', IsLogin, upload.none(), Controller.details)
+
+Router.post('/report', IsLogin, upload.none(), Controller.report)
+
 module.exports = Router

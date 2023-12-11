@@ -37,6 +37,13 @@
                 <div class="menu">
 
                     <div class="item">
+                        <a href="/">
+                            <i class="fas fa-house-user"></i>
+                            Home
+                        </a>
+                    </div>
+
+                    <div class="item">
                         <a href="/recent-order">
                             <i class="far fa-eye"></i>
                             Recent Order
@@ -44,10 +51,12 @@
                     </div>
 
                     <div class="item">
-                        <a href="/">
-                            <i class="fas fa-house-user"></i>
-                            Home
-                        </a>
+                        <form id="reportForm" action="/orders/report" method="post">
+                            <a onclick="submitForm()">
+                                <i class="fas fa-chart-area"></i>
+                                Report And Analytics
+                            </a>
+                        </form>
                     </div>
 
                     <div class="item">
@@ -196,6 +205,11 @@
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
     <script>
+        function submitForm() {
+            var form = document.getElementById("reportForm");
+            form.submit();
+        }
+
         document.getElementById('homeBtn').addEventListener('click', function(event) {
             window.location.href = '/'
         })

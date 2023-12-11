@@ -49,6 +49,13 @@
                 <div class="menu">
 
                     <div class="item">
+                        <a href="/">
+                            <i class="fas fa-house-user"></i>
+                            Home
+                        </a>
+                    </div>
+
+                    <div class="item">
                         <a href="/recent-order">
                             <i class="far fa-eye"></i>
                             Recent Order
@@ -56,10 +63,12 @@
                     </div>
 
                     <div class="item">
-                        <a href="/">
-                            <i class="fas fa-house-user"></i>
-                            Home
-                        </a>
+                        <form id="reportForm" action="/orders/report" method="post">
+                            <a onclick="submitForm()">
+                                <i class="fas fa-chart-area"></i>
+                                Report And Analytics
+                            </a>
+                        </form>
                     </div>
 
                     <div class="item">
@@ -140,7 +149,7 @@
                                 <p><i class="fas fa-dollar-sign"></i> Total price: <strong>$ <%= totalPrice %></strong></p>
                                 <div id="phoneDiv">
                                     <label for="phone"><i class="fa fa-phone"></i> Customer phone number</label>
-                                    <input type="tel" id="phone" name="phone" placeholder="enter customer phone">
+                                    <input type="tel" value="<%= customerPhone %>" id="phone" name="phone" placeholder="enter customer phone">
                                     <button type="button" id="searchBtn">Search Customer</button>
                                 </div>
                                 <div id="information-input" style="display: none;">
@@ -148,7 +157,8 @@
                                     <div id="familiar" style="display: none;">
                                         <p style="font-weight: bold; color: rgb(33, 177, 33);">Familiar customer</p>
                                         <form action="/orders/history-customer" method="post">
-                                            <input type="text" id="customerPhone" name="customerPhone" style="display: none;">
+                                            <input type="text" id="customerPhoneInput" name="customerPhone" style="display: none;">
+                                            <input type="number" id="receivedInput" name="receivedInput" style="display: none;">
                                             <button id="historyBtn">History payment</button>
                                         </form>
                                     </div>
@@ -159,7 +169,7 @@
                                     <input type="text" id="address" name="address">
                                     <label for="received"><i class="fas fa-money-bill-wave"></i> Money received
                                         ($)</label>
-                                    <input type="number" id="received" name="received">
+                                    <input type="number" value="<%= received %>" id="received" name="received">
                                     <label for="refunds"><i class="fas fa-money-bill-wave"></i> Money refunds
                                         ($)</label>
                                     <input type="number" id="refunds" name="refunds">
@@ -214,6 +224,29 @@
 
 
     <script>
+
+        function submitForm() {
+            var form = document.getElementById("reportForm");
+            form.submit();
+        }
+
+        let debounceTimer;
+        document.getElementById('received').addEventListener('input', function (event) {
+
+            clearTimeout(debounceTimer);
+
+            debounceTimer = setTimeout(function () {
+
+                const received = event.target.value
+                const totalPrice = document.getElementById('purchaseBtn').dataset.total_price
+                const refunds = received - totalPrice
+                document.getElementById('refunds').value = refunds
+                document.getElementById('receivedInput').value = received
+
+            }, 300);
+
+        });
+
         document.getElementById('searchBtn').addEventListener('click', function (event) {
 
             const phone = document.getElementById('phone').value
@@ -255,7 +288,7 @@
                             address.value = json.customerAddress
                             name.readOnly = true
                             address.readOnly = true
-                            document.getElementById('customerPhone').value = phone
+                            document.getElementById('customerPhoneInput').value = phone
                         }
                         else {
                             // new customer
@@ -277,20 +310,19 @@
             xhr.send(form)
         });
 
-        let debounceTimer;
-        document.getElementById('received').addEventListener('input', function (event) {
+        document.addEventListener("DOMContentLoaded", function() {
+            var myButton = document.getElementById("searchBtn");
 
-            clearTimeout(debounceTimer);
+            if(document.getElementById("phone").value !== '') {
+                myButton.click();
 
-            debounceTimer = setTimeout(function () {
-
-                const received = event.target.value
-                const totalPrice = document.getElementById('purchaseBtn').dataset.total_price
-                const refunds = received - totalPrice
-                document.getElementById('refunds').value = refunds
-
-            }, 300);
-
+                if(document.getElementById("received").value !== '') {
+                    const received = document.getElementById('received').value
+                    const totalPrice = document.getElementById('purchaseBtn').dataset.total_price
+                    const refunds = received - totalPrice
+                    document.getElementById('refunds').value = refunds
+                }
+            }
         });
 
         document.getElementById('purchaseBtn').addEventListener('click', function (event) {

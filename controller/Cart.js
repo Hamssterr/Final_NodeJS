@@ -118,6 +118,10 @@ module.exports.delete_cart = (req, res) => {
 module.exports.display_payment = (req, res) => {
 
     const employeeName = req.session.user.fullname
+    const customerPhone = req.session.customerPhone || ''
+    const received = req.session.received || ''
+    delete req.session.customerPhone
+    delete req.session.received
 
     Cart.find({ employeeName })
     .then(carts => {
@@ -128,6 +132,6 @@ module.exports.display_payment = (req, res) => {
             totalPrice += cart.totalPrice
         })
 
-        res.render('CheckOut', {listCarts: carts, employeeName, totalQuantity, totalPrice})
+        res.render('CheckOut', {listCarts: carts, employeeName, totalQuantity, totalPrice, customerPhone, received})
     })
 }

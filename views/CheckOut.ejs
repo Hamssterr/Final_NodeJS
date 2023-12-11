@@ -49,9 +49,9 @@
                 <div class="menu">
 
                     <div class="item">
-                        <a href="/dashboard">
+                        <a href="/recent-order">
                             <i class="far fa-eye"></i>
-                            Dashboard
+                            Recent Order
                         </a>
                     </div>
 
@@ -140,13 +140,18 @@
                                 <p><i class="fas fa-dollar-sign"></i> Total price: <strong>$ <%= totalPrice %></strong></p>
                                 <div id="phoneDiv">
                                     <label for="phone"><i class="fa fa-phone"></i> Customer phone number</label>
-                                    <input type="number" id="phone" name="phone" placeholder="enter customer phone">
+                                    <input type="tel" id="phone" name="phone" placeholder="enter customer phone">
                                     <button type="button" id="searchBtn">Search Customer</button>
                                 </div>
                                 <div id="information-input" style="display: none;">
                                     <p id="new" style="font-weight: bold; color: red; display: none;">New customer</p>
-                                    <p id="familiar" style="font-weight: bold; color: rgb(33, 177, 33); display: none;">
-                                        Familiar customer</p>
+                                    <div id="familiar" style="display: none;">
+                                        <p style="font-weight: bold; color: rgb(33, 177, 33);">Familiar customer</p>
+                                        <form action="/orders/history-customer" method="post">
+                                            <input type="text" id="customerPhone" name="customerPhone" style="display: none;">
+                                            <button id="historyBtn">History payment</button>
+                                        </form>
+                                    </div>
                                     <label for="name"><i class="fas fa-user-tie"></i> Customer' name</label>
                                     <input type="text" id="name" name="name">
                                     <label for="address"><i class="fa fa-address-card"></i> Customer'
@@ -250,6 +255,7 @@
                             address.value = json.customerAddress
                             name.readOnly = true
                             address.readOnly = true
+                            document.getElementById('customerPhone').value = phone
                         }
                         else {
                             // new customer
@@ -327,7 +333,7 @@
                     const json = JSON.parse(xhr.responseText)
 
                     if (json.code === 0) {
-                        return window.location.href = '/dashboard'
+                        return window.location.href = '/recent-order'
                     }
                     else if (json.code === 2) {
                         return alert(json.message)

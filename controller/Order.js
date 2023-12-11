@@ -97,3 +97,8 @@ module.exports.add_order = (req, res) => {
             return res.json({ code: 2, message: 'Create order failed' })
         })
 }
+
+module.exports.history_customer = (req, res) => {
+    const {customerPhone} = req.body
+    return res.json({code: 0, message: 'Phone = ' + customerPhone})
+}

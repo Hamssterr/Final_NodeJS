@@ -20,7 +20,7 @@ Router.get('/', IsLogin, ProductController.display_products)
 
 Router.post('/search-products', IsLogin, upload.none(), ProductController.search_products)
 
-Router.get('/dashboard', IsLogin, HomeController.dashboard)
+Router.get('/recent-order', IsLogin, HomeController.dashboard)
 
 Router.get('/information', IsLogin, HomeController.information)
 

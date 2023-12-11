@@ -17,4 +17,6 @@ const IsLogin = require('../validators/IsLogin')
 
 Router.post('/add', IsLogin, upload.none(), Controller.add_order)
 
+Router.post('/history-customer', IsLogin, Controller.history_customer)
+
 module.exports = Router

@@ -106,9 +106,10 @@
         <!-- ==================== Main ================= -->
         <div class="main">
             <div class="topbar">
+
+                <button id="homeBtn"><i class="fa fa-home"></i> Home</button>
+
             </div>
-
-
 
 
             <div class="container-item-cart">
@@ -174,34 +175,39 @@
 
 
     <script>
+
+        document.getElementById('homeBtn').addEventListener('click', function (event) {
+            window.location.href = '/'
+        })
+
         document.querySelectorAll('.remove').forEach(function (button) {
-        button.addEventListener('click', function () {
-            var barcode = button.getAttribute('data-barcode');
+            button.addEventListener('click', function () {
+                var barcode = button.getAttribute('data-barcode');
 
-            const url = '/carts/delete'
-            
-            let form = new FormData();
+                const url = '/carts/delete'
 
-            form.set('barcode', barcode)
+                let form = new FormData();
 
-            let xhr = new XMLHttpRequest();
+                form.set('barcode', barcode)
 
-            xhr.open('POST', url, true)
+                let xhr = new XMLHttpRequest();
 
-            xhr.addEventListener('load', e => {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    const json = JSON.parse(xhr.responseText)
+                xhr.open('POST', url, true)
 
-                    if (json.code === 0) {
-                        return window.location.reload()
+                xhr.addEventListener('load', e => {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        const json = JSON.parse(xhr.responseText)
+
+                        if (json.code === 0) {
+                            return window.location.reload()
+                        }
+                        return console.log('remove failed')
                     }
-                    return console.log('remove failed')
-                }
-            })
+                })
 
-            xhr.send(form)
+                xhr.send(form)
+            });
         });
-    });
     </script>
 
 

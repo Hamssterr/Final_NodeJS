@@ -257,7 +257,8 @@ body{
 
 	margin: 0 auto;
   background-color:blanchedalmond;
-
+  margin-top: 2%;
+  margin-left: 10%;
 }
 
 .container-item-cart> h1{
@@ -450,4 +451,19 @@ body{
   border-radius: 10%;
   width: 200px;
   height: 200px;
+}
+
+.topbar button {
+  padding: 20px;
+  background-color: #474f49;
+  color: rgb(255, 255, 255);
+  margin-top: 20px;
+  margin-left: 20px;
+  font-size: 20px;
+  float: right;
+  border-radius: 10px;
+}
+
+.topbar button:hover {
+  background-color: #45a049;
 }

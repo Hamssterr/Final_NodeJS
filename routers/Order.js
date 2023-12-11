@@ -1,9 +1,10 @@
 const express = require('express')
 const Router = express.Router()
 const multer = require('multer')
+const path = require('path');
 
 const upload = multer({
-    dest: 'public/Image/products',
+    dest: path.join(__dirname, '..', 'public', 'Image', 'products'),
     fileFilter: (req, file, callback) => {
         if (file.mimetype.startsWith('image/')) {
             callback(null, true)

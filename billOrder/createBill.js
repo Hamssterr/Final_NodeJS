@@ -3,7 +3,7 @@ const PDFDocument = require('pdfkit');
 const path = require('path');
 
 function createBill(employeeName, order, detailsOrder) {
-    const fileName = 'bill' + '_' + order._id + '.pdf'
+    const fileName = 'bill.pdf'
     const outputPath = path.join(__dirname, '..', 'public', 'Bill', fileName);
     const stream = fs.createWriteStream(outputPath, { encoding: 'utf8' });
     stream.write('\uFEFF', 'utf8');
@@ -12,6 +12,8 @@ function createBill(employeeName, order, detailsOrder) {
 
     doc.pipe(stream);
 
+    doc.text(`------------Recent Order------------`);
+    doc.text(`====================================`);
     doc.text(`Employee's Name: ${employeeName}`);
     doc.text(`Customer's Phone: ${order.customerPhone}`);
     doc.text(`Customer's Name: ${order.customerName}`);
@@ -21,7 +23,7 @@ function createBill(employeeName, order, detailsOrder) {
     doc.text(`Received: $${order.received}`);
     doc.text(`Refunds: $${order.refunds}`);
     doc.text(`Date creation: ${order.creation_date}`);
-    doc.text(`===================================`);
+    doc.text(`====================================`);
     doc.text(`List products:`);
     doc.text(`Barcode - Name - Quantity - Total price`);
 

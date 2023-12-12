@@ -388,7 +388,7 @@ module.exports.lock_and_unlock_employee = async (req, res) => {
             })
     });
 
-    return res.json({ code: 0, message: `Lock success: ${idsArray.length}` })
+    return res.json({ code: 0, message: `${status} success: ${idsArray.length}` })
 }
 
 module.exports.resend_email = async (req, res) => {

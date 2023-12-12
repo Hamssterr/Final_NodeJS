@@ -33,7 +33,7 @@ function createToken(fullname, email, username, phone) {
             text: 'Please click the link below to log in',
             html: `
                 <p>Please click the link below to log in:</p>
-                <a href="http://localhost:8888/accounts/login?token=${token}&username=${username}">Click to login</a>
+                <a href="${LINK_WEB}/accounts/login?token=${token}&username=${username}">Click to login</a>
             `
         };
 
